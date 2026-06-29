@@ -19,7 +19,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <div className="flex items-center justify-between py-5 font-medium">
+    <div className="sticky top-0 z-10 flex items-center justify-between bg-white py-5 font-medium">
       <Link to="/">
         <img alt="" className="w-36" src={assets.logo} />
       </Link>
@@ -97,7 +97,7 @@ const Navbar = () => {
       </div>
 
       <div
-        className={`absolute top-0 right-0 bottom-0 overflow-hidden bg-white transition-all ${
+        className={`fixed top-0 right-0 bottom-0 z-50 overflow-hidden bg-white transition-all ${
           visible ? "w-full" : "w-0"
         }`}
       >
