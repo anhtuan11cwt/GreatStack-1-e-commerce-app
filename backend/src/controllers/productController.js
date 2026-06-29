@@ -44,6 +44,14 @@ const addProduct = async (req, res) => {
       (img) => img !== undefined,
     );
 
+    if (images.length === 0) {
+      return res.status(400).json({
+        data: null,
+        message: "Phải có ít nhất một ảnh sản phẩm",
+        success: false,
+      });
+    }
+
     const imagesUrl = await Promise.all(
       images.map(
         (img) =>
@@ -92,7 +100,7 @@ const addProduct = async (req, res) => {
 
 const listProducts = async (_req, res) => {
   try {
-    const products = await productModel.find({});
+    const products = await productModel.find({}).sort({ date: -1 });
     res.status(200).json({
       data: { products },
       message: "Lấy danh sách sản phẩm thành công",
@@ -181,6 +189,18 @@ const editProduct = async (req, res) => {
     const newImages = [image1, image2, image3, image4].filter(
       (img) => img !== undefined,
     );
+
+    const finalImageCount =
+      (existingImages ? existingImages.length : existing.image.length) +
+      newImages.length;
+
+    if (finalImageCount === 0) {
+      return res.status(400).json({
+        data: null,
+        message: "Phải có ít nhất một ảnh sản phẩm",
+        success: false,
+      });
+    }
 
     if (existingImages || newImages.length > 0) {
       const toDelete = existingImages

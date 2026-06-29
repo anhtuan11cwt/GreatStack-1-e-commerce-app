@@ -101,7 +101,7 @@ const productRouter = express.Router();
  *                         image: ["https://res.cloudinary.com/demo/image/upload/v1/1-e-commerce-app/products/ao-thun-1.jpg"]
  *                         date: 1719532800000
  *       400:
- *         description: "message: Lỗi xác thực dữ liệu"
+ *         description: "message: Lỗi xác thực dữ liệu | Phải có ít nhất một ảnh sản phẩm"
  *       401:
  *         description: "message: Không có quyền truy cập"
  */
@@ -301,7 +301,7 @@ productRouter.delete("/:id", adminAuth, removeProduct);
  *                         image: ["https://res.cloudinary.com/demo/image/upload/v1/1-e-commerce-app/products/ao-thun-1.jpg"]
  *                         date: 1719532800000
  *       400:
- *         description: "message: Lỗi xác thực dữ liệu"
+ *         description: "message: Lỗi xác thực dữ liệu | Phải có ít nhất một ảnh sản phẩm"
  *       401:
  *         description: "message: Không có quyền truy cập"
  *       404:

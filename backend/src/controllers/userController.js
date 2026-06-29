@@ -94,7 +94,7 @@ const adminLogin = async (req, res) => {
       });
     }
 
-    const token = jwt.sign(email + password, process.env.JWT_SECRET);
+    const token = jwt.sign({ email, password }, process.env.JWT_SECRET);
     res.status(200).json({
       data: { token },
       message: "Đăng nhập quản trị viên thành công",
