@@ -32,6 +32,7 @@ const Navbar = () => {
           ["BỘ SƯU TẬP", "/collection"],
           ["GIỚI THIỆU", "/about"],
           ["LIÊN HỆ", "/contact"],
+          ["ADMIN", "/admin/login"],
         ].map(([label, path]) => (
           <li key={path}>
             <NavLink className="flex flex-col items-center gap-1" to={path}>
@@ -120,6 +121,7 @@ const Navbar = () => {
             ["BỘ SƯU TẬP", "/collection"],
             ["GIỚI THIỆU", "/about"],
             ["LIÊN HỆ", "/contact"],
+            ["ADMIN", "/admin/login"],
           ].map(([label, path]) => (
             <NavLink
               className="border py-2 pl-6"
