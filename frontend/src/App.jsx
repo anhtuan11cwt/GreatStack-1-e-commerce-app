@@ -19,6 +19,7 @@ const Login = lazy(() => import("./pages/Login"));
 const PlaceOrder = lazy(() => import("./pages/PlaceOrder"));
 const Orders = lazy(() => import("./pages/Orders"));
 const Profile = lazy(() => import("./pages/Profile"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 const AdminAdd = lazy(() => import("./admin/pages/AdminAdd"));
 const AdminList = lazy(() => import("./admin/pages/AdminList"));
@@ -29,8 +30,14 @@ const AdminEdit = lazy(() => import("./admin/pages/AdminEdit"));
 const App = () => {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin");
-  const [token, setToken] = useState(() => localStorage.getItem("token") || "");
+  const [token, setToken] = useState(
+    () => localStorage.getItem("admin_token") || "",
+  );
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  if (isAdminRoute && !token && localStorage.getItem("token")) {
+    return <Navigate replace to="/" />;
+  }
 
   if (token) {
     const adminContent = (() => {
@@ -128,6 +135,7 @@ const App = () => {
           <Route element={<PlaceOrder />} path="/place-order" />
           <Route element={<Orders />} path="/orders" />
           <Route element={<Profile />} path="/profile" />
+          <Route element={<NotFound />} path="*" />
         </Routes>
       </Suspense>
       {location.pathname !== "/login" && <Footer />}

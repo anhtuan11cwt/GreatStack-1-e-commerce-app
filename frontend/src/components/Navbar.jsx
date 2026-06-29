@@ -1,6 +1,7 @@
 import { LogOut, Package, User } from "lucide-react";
 import { useContext, useEffect, useRef, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import toast from "react-hot-toast";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { ShopContext } from "../context/ShopContextValue";
 
@@ -8,7 +9,9 @@ const Navbar = () => {
   const [visible, setVisible] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const { setShowSearch, getCartCount } = useContext(ShopContext);
+  const navigate = useNavigate();
+  const { setCartItems, setShowSearch, setToken, token, getCartCount } =
+    useContext(ShopContext);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -19,6 +22,15 @@ const Navbar = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const logout = () => {
+    setMenuOpen(false);
+    localStorage.removeItem("token");
+    setToken("");
+    setCartItems({});
+    toast.success("Đã đăng xuất");
+    navigate("/login");
+  };
 
   return (
     <div className="sticky top-0 z-10 flex items-center justify-between bg-white py-5 font-medium">
@@ -32,7 +44,7 @@ const Navbar = () => {
           ["BỘ SƯU TẬP", "/collection"],
           ["GIỚI THIỆU", "/about"],
           ["LIÊN HỆ", "/contact"],
-          ["ADMIN", "/admin/login"],
+          ...(!token ? [["ADMIN", "/admin/login"]] : []),
         ].map(([label, path]) => (
           <li key={path}>
             <NavLink className="flex flex-col items-center gap-1" to={path}>
@@ -48,42 +60,51 @@ const Navbar = () => {
           <img alt="" className="w-5 cursor-pointer" src={assets.search_icon} />
         </button>
 
-        <div className="relative" ref={dropdownRef}>
-          <button onClick={() => setMenuOpen((prev) => !prev)} type="button">
-            <img
-              alt=""
-              className="w-5 cursor-pointer"
-              src={assets.profile_icon}
-            />
-          </button>
-          <div
-            className={`absolute right-0 pt-4 ${menuOpen ? "block" : "hidden"}`}
-          >
-            <div className="flex w-44 flex-col gap-2 rounded bg-slate-100 px-5 py-3 text-gray-500">
-              <Link
-                className="flex cursor-pointer items-center gap-2 hover:text-black"
-                onClick={() => setMenuOpen(false)}
-                to="/profile"
-              >
-                <User size={14} /> Hồ sơ của tôi
-              </Link>
-              <Link
-                className="flex cursor-pointer items-center gap-2 hover:text-black"
-                onClick={() => setMenuOpen(false)}
-                to="/orders"
-              >
-                <Package size={14} /> Đơn hàng
-              </Link>
-              <Link
-                className="flex cursor-pointer items-center gap-2 hover:text-black"
-                onClick={() => setMenuOpen(false)}
-                to="/login"
-              >
-                <LogOut size={14} /> Đăng xuất
-              </Link>
+        {localStorage.getItem("token") ? (
+          <div className="relative" ref={dropdownRef}>
+            <button onClick={() => setMenuOpen((prev) => !prev)} type="button">
+              <img
+                alt=""
+                className="w-5 cursor-pointer"
+                src={assets.profile_icon}
+              />
+            </button>
+            <div
+              className={`absolute right-0 pt-4 ${menuOpen ? "block" : "hidden"}`}
+            >
+              <div className="flex w-44 flex-col gap-2 rounded bg-slate-100 px-5 py-3 text-gray-500">
+                <Link
+                  className="flex cursor-pointer items-center gap-2 hover:text-black"
+                  onClick={() => setMenuOpen(false)}
+                  to="/profile"
+                >
+                  <User size={14} /> Hồ sơ của tôi
+                </Link>
+                <Link
+                  className="flex cursor-pointer items-center gap-2 hover:text-black"
+                  onClick={() => setMenuOpen(false)}
+                  to="/orders"
+                >
+                  <Package size={14} /> Đơn hàng
+                </Link>
+                <button
+                  className="flex cursor-pointer items-center gap-2 hover:text-black"
+                  onClick={logout}
+                  type="button"
+                >
+                  <LogOut size={14} /> Đăng xuất
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <Link
+            className="rounded-full border border-gray-300 px-4 py-1 text-gray-700 text-sm hover:bg-gray-100"
+            to="/login"
+          >
+            Đăng nhập
+          </Link>
+        )}
 
         <Link className="relative" to="/cart">
           <img alt="" className="w-5 min-w-5" src={assets.cart_icon} />
@@ -121,7 +142,7 @@ const Navbar = () => {
             ["BỘ SƯU TẬP", "/collection"],
             ["GIỚI THIỆU", "/about"],
             ["LIÊN HỆ", "/contact"],
-            ["ADMIN", "/admin/login"],
+            ...(!token ? [["ADMIN", "/admin/login"]] : []),
           ].map(([label, path]) => (
             <NavLink
               className="border py-2 pl-6"

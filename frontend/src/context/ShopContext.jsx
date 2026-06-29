@@ -1,7 +1,9 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { products } from "../assets/assets";
 import { ShopContext } from "./ShopContextValue";
+
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 const ShopContextProvider = ({ children }) => {
   const currency = "₫";
@@ -9,6 +11,22 @@ const ShopContextProvider = ({ children }) => {
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
   const [cartItems, setCartItems] = useState({});
+  const [products, setProducts] = useState([]);
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
+
+  useEffect(() => {
+    const getProductsData = async () => {
+      try {
+        const response = await axios.get(`${backendUrl}/api/v1/product/list`);
+        if (response.data.success) {
+          setProducts(response.data.data.products);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getProductsData();
+  }, []);
 
   const addToCart = async (itemId, size) => {
     if (!size) {
@@ -71,6 +89,7 @@ const ShopContextProvider = ({ children }) => {
 
   const value = {
     addToCart,
+    backendUrl,
     cartItems,
     currency,
     deliveryFee,
@@ -78,9 +97,12 @@ const ShopContextProvider = ({ children }) => {
     getCartCount,
     products,
     search,
+    setCartItems,
     setSearch,
     setShowSearch,
+    setToken,
     showSearch,
+    token,
     updateQuantity,
   };
 
