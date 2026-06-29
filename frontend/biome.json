@@ -93,6 +93,17 @@
           }
         }
       }
+    },
+    {
+      "includes": ["src/components/ScrollToTop.jsx"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedVariables": "off",
+            "useExhaustiveDependencies": "off"
+          }
+        }
+      }
     }
   ],
   "vcs": {

@@ -8,7 +8,7 @@ const Navbar = () => {
   const [visible, setVisible] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const { setShowSearch } = useContext(ShopContext);
+  const { setShowSearch, getCartCount } = useContext(ShopContext);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -87,7 +87,7 @@ const Navbar = () => {
         <Link className="relative" to="/cart">
           <img alt="" className="w-5 min-w-5" src={assets.cart_icon} />
           <p className="absolute right-[-10px] bottom-[-5px] aspect-square w-4 rounded-full bg-black text-center text-[8px] text-white leading-4">
-            10
+            {getCartCount()}
           </p>
         </Link>
 

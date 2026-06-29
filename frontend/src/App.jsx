@@ -1,7 +1,9 @@
 import { lazy, Suspense } from "react";
+import { Toaster } from "react-hot-toast";
 import { Route, Routes } from "react-router-dom";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
+import ScrollToTop from "./components/ScrollToTop";
 import SearchBar from "./components/SearchBar";
 
 const Home = lazy(() => import("./pages/Home"));
@@ -18,8 +20,10 @@ const Profile = lazy(() => import("./pages/Profile"));
 const App = () => {
   return (
     <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
+      <ScrollToTop />
       <Navbar />
       <SearchBar />
+      <Toaster duration={2000} position="top-center" />
       <Suspense fallback={<div />}>
         <Routes>
           <Route element={<Home />} path="/" />
