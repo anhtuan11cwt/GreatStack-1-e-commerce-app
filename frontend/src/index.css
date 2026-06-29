@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+a.active hr {
+  display: block;
+}
+
+@media (max-width: 640px) {
+  a.active {
+    color: white;
+    background: black;
+  }
+}
