@@ -1,4 +1,5 @@
 import { useContext, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { ShopContext } from "../context/ShopContextValue";
 
@@ -6,6 +7,7 @@ const SearchBar = () => {
   const { search, setSearch, showSearch, setShowSearch } =
     useContext(ShopContext);
   const inputRef = useRef(null);
+  const location = useLocation();
 
   useEffect(() => {
     if (showSearch && inputRef.current) {
@@ -13,7 +15,7 @@ const SearchBar = () => {
     }
   }, [showSearch]);
 
-  return showSearch ? (
+  return showSearch && location.pathname.includes("collection") ? (
     <div className="border-t border-b bg-gray-50 text-center">
       <div className="mx-5 my-3 inline-flex w-3/4 items-center justify-center rounded-full border border-gray-400 px-5 py-2 sm:w-1/2">
         <input
