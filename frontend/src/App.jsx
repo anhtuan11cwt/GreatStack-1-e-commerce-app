@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react";
 import { Toaster } from "react-hot-toast";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import ScrollToTop from "./components/ScrollToTop";
@@ -18,6 +18,8 @@ const Orders = lazy(() => import("./pages/Orders"));
 const Profile = lazy(() => import("./pages/Profile"));
 
 const App = () => {
+  const location = useLocation();
+
   return (
     <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
       <ScrollToTop />
@@ -38,7 +40,7 @@ const App = () => {
           <Route element={<Profile />} path="/profile" />
         </Routes>
       </Suspense>
-      <Footer />
+      {location.pathname !== "/login" && <Footer />}
     </div>
   );
 };
