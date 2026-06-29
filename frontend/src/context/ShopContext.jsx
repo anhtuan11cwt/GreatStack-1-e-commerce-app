@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { ShopContext } from "./ShopContextValue";
 
@@ -48,6 +48,19 @@ const ShopContextProvider = ({ children }) => {
     }
 
     setCartItems(cartData);
+
+    if (token) {
+      try {
+        await axios.post(
+          `${backendUrl}/api/v1/cart`,
+          { itemId, size },
+          { headers: { token } },
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
     toast.success("Đã thêm vào giỏ hàng");
   };
 
@@ -61,7 +74,7 @@ const ShopContextProvider = ({ children }) => {
     return totalCount;
   };
 
-  const updateQuantity = (itemId, size, quantity) => {
+  const updateQuantity = async (itemId, size, quantity) => {
     const cartData = structuredClone(cartItems);
     cartData[itemId][size] = quantity;
 
@@ -73,6 +86,18 @@ const ShopContextProvider = ({ children }) => {
     }
 
     setCartItems(cartData);
+
+    if (token) {
+      try {
+        await axios.patch(
+          `${backendUrl}/api/v1/cart`,
+          { itemId, quantity, size },
+          { headers: { token } },
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   const getCartAmount = () => {
@@ -87,6 +112,39 @@ const ShopContextProvider = ({ children }) => {
     return totalAmount;
   };
 
+  const getUserCart = useCallback(async (userToken) => {
+    try {
+      const response = await axios.get(`${backendUrl}/api/v1/cart`, {
+        headers: { token: userToken },
+      });
+      if (response.data.success) {
+        setCartItems(response.data.data.cartData);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!token) return;
+    const controller = new AbortController();
+    const fetchCart = async () => {
+      try {
+        const response = await axios.get(`${backendUrl}/api/v1/cart`, {
+          headers: { token },
+          signal: controller.signal,
+        });
+        if (response.data.success) {
+          setCartItems(response.data.data.cartData);
+        }
+      } catch (error) {
+        if (!controller.signal.aborted) console.log(error);
+      }
+    };
+    fetchCart();
+    return () => controller.abort();
+  }, [token]);
+
   const value = {
     addToCart,
     backendUrl,
@@ -95,6 +153,7 @@ const ShopContextProvider = ({ children }) => {
     deliveryFee,
     getCartAmount,
     getCartCount,
+    getUserCart,
     products,
     search,
     setCartItems,
