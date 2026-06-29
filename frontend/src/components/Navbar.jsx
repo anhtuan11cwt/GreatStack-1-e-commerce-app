@@ -1,12 +1,14 @@
 import { LogOut, Package, User } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { assets } from "../assets/assets";
+import { ShopContext } from "../context/ShopContextValue";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const { setShowSearch } = useContext(ShopContext);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -41,7 +43,9 @@ const Navbar = () => {
       </ul>
 
       <div className="flex items-center gap-6">
-        <img alt="" className="w-5 cursor-pointer" src={assets.search_icon} />
+        <button onClick={() => setShowSearch(true)} type="button">
+          <img alt="" className="w-5 cursor-pointer" src={assets.search_icon} />
+        </button>
 
         <div className="relative" ref={dropdownRef}>
           <button onClick={() => setMenuOpen((prev) => !prev)} type="button">
