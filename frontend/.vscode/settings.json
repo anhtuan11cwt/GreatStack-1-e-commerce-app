@@ -38,5 +38,13 @@
     "prettier.insertPragma": true,
     "prettier.requireConfig": true,
     "prettier.requirePragma": true,
-    "typescript.tsserver.enableTracing": true
+    "typescript.tsserver.enableTracing": true,
+    "editor.codeActionsOnSave": {
+        "source.action.useSortedAttributes.biome": "explicit",
+        "source.action.useSortedKeys.biome": "explicit",
+        "source.action.useSortedInterfaceMembers.biome": "explicit",
+        "source.action.useSortedProperties.biome": "explicit",
+        "source.organizeImports.biome": "explicit",
+        "source.fixAll.biome": "explicit"
+    }
 }

@@ -1,15 +1,4 @@
 {
-  "name": "frontend",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "predev": "npx kill-port 5173",
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
-  },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.1",
     "react": "^19.2.7",
@@ -17,6 +6,7 @@
     "tailwindcss": "^4.3.1"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.4.16",
     "@eslint/js": "^10.0.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
@@ -26,5 +16,21 @@
     "eslint-plugin-react-refresh": "^0.5.3",
     "globals": "^17.6.0",
     "vite": "^8.1.0"
-  }
+  },
+  "name": "frontend",
+  "private": true,
+  "scripts": {
+    "build": "vite build",
+    "check": "biome check --write",
+    "check2": "biome check --write --unsafe",
+    "ci": "npx @biomejs/biome ci",
+    "dev": "vite",
+    "format": "biome format --write",
+    "lint": "eslint .",
+    "lint2": "biome lint --write",
+    "predev": "npx kill-port 5173",
+    "preview": "vite preview"
+  },
+  "type": "module",
+  "version": "0.0.0"
 }
