@@ -5,6 +5,7 @@ import swaggerUi from "swagger-ui-express";
 import connectCloudinary from "./config/cloudinary.js";
 import connectDB from "./config/mongodb.js";
 import swaggerSpec from "./config/swagger.js";
+import productRouter from "./routes/productRoute.js";
 import userRouter from "./routes/userRoute.js";
 
 dotenv.config();
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/product", productRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/", (_req, res) => {
